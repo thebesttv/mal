@@ -198,4 +198,3 @@ wren_STEP_TO_PROG =          impls/wren/$($(1)).wren
 yorick_STEP_TO_PROG =        impls/yorick/$($(1)).i
 xslt_STEP_TO_PROG =          impls/xslt/$($(1))
 zig_STEP_TO_PROG =           impls/zig/$($(1))
-tbt-java_STEP_TO_PROG =      impls/tbt-java/$($(1)).class

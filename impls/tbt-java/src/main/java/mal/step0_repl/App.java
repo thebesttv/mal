@@ -2,9 +2,11 @@
  * TODO: Add full line editing and command history support
  */
 
+package mal.step0_repl;
+
 import java.util.Scanner;
 
-public class step0_repl {
+public class App {
     private static Scanner sc = new Scanner(System.in);
 
     public static String READ(String s) {
