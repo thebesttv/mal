@@ -1,2 +1,3 @@
 #!/bin/bash
-exec ./gradlew -Pstep=${STEP:-stepA_mal} run -q --console=plain #--args="${@}"
+exec java -cp build/classes/java/main mal.${STEP:-stepA_mal}.App "${@}"
+# exec ./gradlew -Pstep=${STEP:-stepA_mal} run -q --console=plain #--args="${@}"
