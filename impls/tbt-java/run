@@ -1,15 +1,36 @@
 #!/bin/bash
 
-# If STEP is not set, then run the latest implemented step.
+# First, the script checks the MAL_IMPL variable to determine run mode
+# and whether to enable logging.  If MAL_IMPL is empty, then it's run
+# from command line, and logging is turned on.  However, if MAL_IMPL is
+# not empty, then the script is run using "make test^impl^stepn", so it
+# turns off logging.
 
-# get latest implemented step
+# The file logback.xml determines whether logging is turned on or off.
+# The directory containing the file is specified in Java classpath:
+# - src/main/resources/logback-on: has the config file that logs to stderr
+# - src/main/resources/logback-off: turns off logging
+
+# The STEP variable is used to run different implementation stages.  If
+# STEP is not set, the script tries to determine the latest implemented
+# step under src/main/java/mal/.  The variable LATEST is used under this
+# situation:
 LATEST=$(ls src/main/java/mal/ | sort -r | head -n1)
+STEP=${STEP:-$LATEST}
 
-# echo "Running ${STEP:-$LATEST}"
+LOG_ON=src/main/resources/logback-on
+LOG_OFF=src/main/resources/logback-off
 
-# classpath wildcards, from https://stackoverflow.com/a/219801
-exec java -cp "build/classes/java/main/:lib/*:src/main/resources/" \
-     mal.${STEP:-$LATEST}.App "${@}"
+if [ -z "$MAL_IMPL" ]; then
+    # MAL_IMPL is empty, enable logging
+    # classpath wildcards, from https://stackoverflow.com/a/219801
+    exec java -cp "build/classes/java/main/:lib/*:$LOG_ON" \
+         mal.$STEP.App "${@}"
+else
+    # MAL_IMPL not empty, disable logging
+    exec java -cp "build/classes/java/main/:lib/*:$LOG_OFF" \
+         mal.$STEP.App "${@}"
+fi
 
 # gradle runs too slow, takes 600ms to start
 # exec ./gradlew -Pstep=${STEP:-stepA_mal} run -q --console=plain #--args="${@}"

@@ -19,4 +19,5 @@
     <root level="debug">
         <appender-ref ref="STDERR" />
     </root>
+
 </configuration>
