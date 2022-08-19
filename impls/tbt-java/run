@@ -1,3 +1,15 @@
 #!/bin/bash
-exec java -cp build/classes/java/main mal.${STEP:-stepA_mal}.App "${@}"
+
+# If STEP is not set, then run the latest implemented step.
+
+# get latest implemented step
+LATEST=$(ls src/main/java/mal/ | sort -r | head -n1)
+
+# echo "Running ${STEP:-$LATEST}"
+
+# classpath wildcards, from https://stackoverflow.com/a/219801
+exec java -cp "build/classes/java/main/:lib/*:src/main/resources/" \
+     mal.${STEP:-$LATEST}.App "${@}"
+
+# gradle runs too slow, takes 600ms to start
 # exec ./gradlew -Pstep=${STEP:-stepA_mal} run -q --console=plain #--args="${@}"
