@@ -1,0 +1,27 @@
+#+title: thebesttv's Java implementation of MAL
+
+* The =run= script
+
+Because =./gradlew run= is very slow (takes about 600ms to start), the
+=./run= script instead calls =java= directly from the commandline.  This
+means:
+- The Java class path (=-cp=) needs to be set directly.  All =.jar=
+  libraries are under =lib/=, and the file =logback.xml= is under either
+  =src/main/resources/logback-on/= or =src/main/resources/logback-off/=.
+- Before running the script, the project needs to be explicitly built
+  using =./gradlew build= in case of any change of code.
+
+To build the project and also run MAL interactively using the script:
+#+begin_src bash
+  ./gradlew build && ./run
+#+end_src
+Specify a stage using the =STEP= variable:
+#+begin_src bash
+  STEP=step1_read_print ./run
+#+end_src
+
+As an alternative, we can also use gradle to run (default to
+=step0_repl= unless =-Pstep=xxx= is specified):
+#+begin_src bash
+  ./gradlew -Pstep=step1_read_print run -q --console=plain
+#+end_src
